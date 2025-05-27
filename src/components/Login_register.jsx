@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react"; // Remove `use` — it doesn't exist
-
+import axios from "axios";
 import styled from "styled-components";
 
 const LoginRegister = () => {
@@ -29,17 +29,123 @@ const LoginRegister = () => {
     </BoxHolder>
   );
 };
+// const LoginForm = () => {
+//   const [loginMailOnchange, setLogingMailOnchange] = useState("");
+//   const [loginPasswordOnchange, setLogingPasswordOnchange] = useState("");
+//   const handleloginMailOnchange = (e) => {
+//     setLogingMailOnchange(e.value);
+//   };
+//   const handleloginPasswordOnchange = (e) => {
+//     setLogingPasswordOnchange(e.value);
+//   };
+//   const handleLogin = async (e) => {
+//     e.preventDefault(); // Prevent default form submission behavior
+//     console.log(loginMailOnchange);
+//     const userData = {
+//       loginMailOnchange,
+//       loginPasswordOnchange,
+//     };
+//     console.log(userData);
+//     try {
+//       const response = await axios.post(
+//         "http://localhost:5000/api/users",
+//         userData
+//       );
+
+//       alert("User successfully logged in!");
+//       console.log("Response:", response.data);
+//     } catch (err) {
+//       console.error("Error: User unable to login:", err);
+//       alert("Error: User unable to login.");
+//     }
+//   };
+
+//   return (
+//     <div id="LoginBox" className="formContainer">
+//       <form onSubmit={handleLogin}>
+//         <input
+//           type="text"
+//           onChange={handleloginMailOnchange}
+//           placeholder="Email"
+//           value={loginMailOnchange}
+//         />
+//         <input
+//           type="password"
+//           onChange={handleloginPasswordOnchange}
+//           value={loginPasswordOnchange}
+//           placeholder="Password"
+//         />
+//       </form>
+//       <button id="LoginButton" onClick={handleLogin}>
+//         Login
+//       </button>
+//     </div>
+//   );
+// };
+
 const LoginForm = () => {
+  const [loginMailOnchange, setLogingMailOnchange] = useState("");
+  const [loginPasswordOnchange, setLogingPasswordOnchange] = useState("");
+  const fetchUserByEmail = async (email) => {
+    try {
+      const res = await axios.get(`http://localhost:5000/api/users/${email}`);
+      console.log("User found:", res.data);
+    } catch (err) {
+      console.error("User not found or error occurred", err);
+    }
+  };
+
+  const handleloginMailOnchange = (e) => {
+    setLogingMailOnchange(e.target.value);
+  };
+
+  const handleloginPasswordOnchange = (e) => {
+    setLogingPasswordOnchange(e.target.value);
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const userData = {
+      email: loginMailOnchange,
+      password: loginPasswordOnchange,
+    };
+    fetchUserByEmail(loginMailOnchange);
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/users",
+        userData
+      );
+      alert("User successfully logged in!");
+      console.log("Response:", response.data);
+    } catch (err) {
+      console.error("Error: User unable to login:", err);
+      alert("Error: User unable to login.");
+    }
+  };
+
   return (
     <div id="LoginBox" className="formContainer">
-      <form>
-        <input type="text" placeholder="Email" />
-        <input type="password" placeholder="Password" />
+      <form onSubmit={handleLogin}>
+        <input
+          type="text"
+          onChange={handleloginMailOnchange}
+          placeholder="Email"
+          value={loginMailOnchange}
+        />
+        <input
+          type="password"
+          onChange={handleloginPasswordOnchange}
+          value={loginPasswordOnchange}
+          placeholder="Password"
+        />
+        <button id="LoginButton" type="submit">
+          Login
+        </button>
       </form>
-      <button id="LoginButton">Login</button>
     </div>
   );
 };
+
 const RegisterForm = () => {
   return (
     <div id="RegisterBox" className="formContainer">

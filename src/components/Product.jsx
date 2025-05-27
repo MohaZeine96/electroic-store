@@ -8,8 +8,8 @@ const ProductHolder = ({ products, Gatageries }) => {
         <div className="title">{Gatageries}</div>
         <div className="RightLine"></div>
       </ProductGatagriesType>
-      <Product_Holder>
-        {products.map((element, index) => (
+      <ProductHolderC>
+        {products?.map((element, index) => (
           <Product
             key={index}
             src={element.imageSrc}
@@ -17,10 +17,11 @@ const ProductHolder = ({ products, Gatageries }) => {
             price={element.price}
           />
         ))}
-      </Product_Holder>
+      </ProductHolderC>
     </>
   );
 };
+
 const Product = ({ src, name, price }) => {
   return (
     <PorductBox>
@@ -34,15 +35,15 @@ const Product = ({ src, name, price }) => {
     </PorductBox>
   );
 };
-const Product_Holder = styled.div`
-  width: 1200px;
-  height: 200px;
+const ProductHolderC = styled.div`
+  width: 1400px;
+  height: 300px;
   margin: 30px auto;
   display: flex;
   justify-content: space-around;
 `;
 const ProductGatagriesType = styled.div`
-  width: 1200px;
+  width: 1400px;
   margin: 0 auto;
   height: 40px;
   display: flex;

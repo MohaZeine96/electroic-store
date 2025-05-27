@@ -5,7 +5,7 @@ const Ulmenu = () => {
     <UlMenu>
       <ul>
         <li>
-          <a href="#">Home</a>
+          <a href="/">Home</a>
         </li>
         <li>
           <a href="#">Appliance</a>
@@ -17,10 +17,10 @@ const Ulmenu = () => {
           <a href="#"> Mobile & Tablets</a>
         </li>
         <li>
-          <a href="#">accessories</a>
+          <a href="/Product">accessories</a>
         </li>
         <li>
-          <a href="#">More Product</a>
+          <a href="/ProductPage">More Product</a>
         </li>
       </ul>
     </UlMenu>
