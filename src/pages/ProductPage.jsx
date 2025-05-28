@@ -6,18 +6,27 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 const brands = ["samsung", "apple", "acer", "msi", "lenovo", "hp"];
 function ProductPage() {
-  const [brand, setBrand] = useState("");
+  const [brand, setBrand] = useState([]);
+  const [minMax, setMinMax] = useState([false]);
   return (
     <AppWrapper>
       <div className="App">
         <Top />
-        <Body setBrand={setBrand} brand={brand} />
+        <Body
+          setBrand={setBrand}
+          brand={brand}
+          setMinMax={setMinMax}
+          minMax={minMax}
+        />
         <Footer />
       </div>
     </AppWrapper>
   );
 }
-function Body({ setBrand, brand }) {
+function Body({ setBrand, brand, setMinMax, minMax }) {
+  const [min, setMin] = useState(false);
+  const [max, setMax] = useState(false);
+
   return (
     <BodyWrapper>
       <Side>
@@ -28,12 +37,48 @@ function Body({ setBrand, brand }) {
           ))}
           <PriceTab>
             <h3>Price</h3>
-            <input type="number" placeholder="min price" />
-            <input type="number" placeholder="max price" />
+            <input
+              value={min}
+              onChange={(e) => {
+                setMin(
+                  Number(e.target.value) <= 0
+                    ? ""
+                    : Number(e.target.value) && Number(e.target.value) > max
+                    ? max
+                    : Number(e.target.value)
+                );
+              }}
+              type="number"
+              placeholder="min price"
+            />
+            <input
+              value={max}
+              onChange={(e) => {
+                setMax(e.target.value <= 0 ? "" : e.target.value);
+              }}
+              type="number"
+              placeholder="max price"
+            />
           </PriceTab>
           <Apply>
-            <button className="cancel">Cancel</button>
-            <button className="apply">Apply</button>
+            <button
+              onClick={() => {
+                setMinMax([false]);
+                setMin("");
+                setMax("");
+              }}
+              className="cancel"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={() => {
+                setMinMax([min, max]);
+              }}
+              className="apply"
+            >
+              Apply
+            </button>
           </Apply>
           <Categories>
             <h3>Categories</h3>
@@ -46,7 +91,7 @@ function Body({ setBrand, brand }) {
           </Categories>
         </SideMenu>
       </Side>
-      <ProductsMain setBrand={setBrand} brand={brand} />
+      <ProductsMain setBrand={setBrand} brand={brand} minMax={minMax} />
     </BodyWrapper>
   );
 }

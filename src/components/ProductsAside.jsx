@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-function ProductsMain({ brand }) {
+function ProductsMain({ brand, minMax }) {
+  const [productsDom, setProductsDom] = useState([]);
   const [products, setProducts] = useState([]);
-  const [Filtered, setFiltered] = useState([]);
+
   useEffect(() => {
     axios
       .get("http://localhost:5000/api/products")
@@ -18,23 +19,30 @@ function ProductsMain({ brand }) {
       });
   }, []);
   useEffect(() => {
-    // setProducts(products.filter((item) => item.brand === brand));
-    const filtered = products.filter((item) => brand.includes(item.brand));
-    console.log(filtered);
-    setFiltered(filtered);
-    if (filtered.length === 0) {
-      setFiltered(products);
-    }
-  }, [brand]);
+    setProductsDom(products);
+  }, [products]);
   useEffect(() => {
-    console.log("Updated Filtered products:", products);
-  }, [Filtered]);
+    let filtered = [...products];
+
+    if (brand.length > 0) {
+      filtered = filtered.filter((item) => brand.includes(item.brand));
+    }
+
+    if (minMax[0] && minMax[1]) {
+      filtered = filtered.filter(
+        (item) => item.price >= minMax[0] && item.price <= minMax[1]
+      );
+    }
+
+    setProductsDom(filtered);
+  }, [brand, minMax]);
+
   return (
     <Aside>
       <AsideTop />
       <DescAndPath />
       <ProductContainer>
-        {Filtered?.map((item) => (
+        {productsDom?.map((item) => (
           <Product
             key={item._id}
             src={item.imageSrc}
